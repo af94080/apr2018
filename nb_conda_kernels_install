@@ -1,0 +1,29 @@
+
+from this tf book 
+
+http://proquest.safaribooksonline.com.ezproxy.plsinfo.org:2048/book/databases/business-intelligence/9781788398923/3dot-from-data-to-decisions-getting-started-with-tensorflow/ch03s02_html#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODE3ODgzOTg5MjMlMkZjaDAzczAzX2h0bWwmcXVlcnk9
+
+installing nb conda kernels
+	in order to see venv in jupyter notebook
+
+from https://youtu.be/rFCBiP9Gkoo?t=8m51s
+
+must have version 4.1 or higher
+	conda --version
+	conda update conda // if its not 4.1 or higher
+	conda list // to check if nb_conda_kernels is already there
+
+conda install nb_conda_kernels
+
+$ conda create -n karimtf python=3.5 ipykernel
+
+// installing tf
+	from https://gist.github.com/johndpope/187b0dd996d16152ace2f842d43e3990
+
+//OSX or Linux
+
+conda create -n tensorflow python=3.5
+source activate tensorflow
+conda install pandas matplotlib jupyter notebook scipy scikit-learn nb_conda nltk  spyder 
+conda install -c conda-forge tensorflow keras
+pip install gym
