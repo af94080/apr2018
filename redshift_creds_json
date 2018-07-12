@@ -1,0 +1,8 @@
+{
+	"user_name": "USER",
+	"password": "****",
+	"host_name": "****.****.us-west-2.redshift.amazonaws.com",
+	"port_num": "5439",
+	"db_name": "****"
+	
+}
