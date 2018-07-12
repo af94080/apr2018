@@ -1,0 +1,71 @@
+
+#1
+
+import pandas as pd
+import numpy as np
+
+from sqlalchemy import create_engine
+
+import sqlalchemy
+import psycopg2
+import json
+
+#2
+
+with open("C:\\Users\\arul.francis\\Desktop\\mystuff\\creds\\redshift_creds.json") as fh:
+    creds = json.load(fh)
+
+connstr = 'redshift+psycopg2://' + \
+                creds['user_name'] + ':' + creds['password'] + '@' + \
+                creds['host_name'] + ':' + creds['port_num'] + '/' + creds['db_name'];
+
+filename = "d_task"
+pathname = "C:\\Users\\arul.francis\\Documents\\metadata_tables\\src_files\\src_files_iter_6\\"
+fullfilename = pathname + filename + ".csv"
+
+# for dims read up to 13 cols :: there's one filler
+df = pd.read_csv(fullfilename, skiprows=1, na_values=None, usecols=np.arange(13) )
+
+#3
+
+# use this for dims
+header_col_list = ['field_name', 'data_type', 'natural_key', 'scd', 'notes', 'filler', 'source_alias', 'source_field_name', 'source_data_type', 'source_transformation', 'source_default_value', 'source_sample_value', 'source_notes']
+
+#4
+
+df.columns = header_col_list
+# add another col to hold the name of the object
+df['object_name'] = filename
+
+#5 inspect visually
+
+df.head()
+
+#6 Converting Column Types to integer and boolean
+
+# convert col "scd" to type integer
+df['scd'] = df['scd'].fillna(0).astype(int)
+# convert natural_key to type boolean
+df['natural_key'] = df['natural_key'].fillna(False).astype('bool')
+
+#7 Dropping Columns and Rows
+
+# if the first col fieldname is null drop the row
+df = df.dropna(axis=0, subset=['field_name'])
+
+# drop the blank column called filler 
+df.drop(['filler'], axis=1, inplace= True)
+
+# convert NaN's to empty string
+df = df.fillna('')
+
+# check row count and col count
+df.shape
+
+#8 Writing to redshift table: staging.meta_object_stm
+
+# connect to redshift
+engine = create_engine(connstr)
+
+# insert to table 
+df.to_sql('meta_object_stm',  engine, index=False, schema='staging', if_exists='append', chunksize=1000)
