@@ -1,0 +1,27 @@
+
+
+# Take movies of year >= 1960.
+# Only consider directors with a minimum of 4 movies,
+# Print the top 20 highest rated directors with their movies ordered desc on rating.
+
+# https://codechalleng.es/challenges/13/
+# find highest rated movie directors
+
+
+url = 'https://raw.githubusercontent.com/sundeepblue/movie_rating_prediction/master/movie_metadata.csv'
+
+import urllib.request, urllib.parse, urllib.error
+
+from urllib.request import urlopen
+from io import StringIO
+from urllib.request import urlopen
+import csv
+
+
+data = urlopen(url).read().decode('ascii','ignore')
+dataFile = StringIO(data)
+csvDictReader = csv.DictReader(dataFile)
+
+# display top 3
+for row in list(csvDictReader)[:3]:
+    print(row['director_name'],row['movie_title'],row['title_year'],row['imdb_score'])
