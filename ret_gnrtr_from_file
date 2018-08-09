@@ -1,0 +1,6 @@
+# return generator
+def gen_files():
+    with open(tempfile) as f:
+        return (line.split(',')[0].lower()
+                for line in f.readlines()
+                if line.strip().endswith('True'))
