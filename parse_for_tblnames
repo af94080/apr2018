@@ -1,0 +1,57 @@
+path = 'C:/Users/arul.francis/Documents/sales_biz_views_srccode_prod_ao_0914/'	
+pattern = 'bv'
+
+
+def get_fnames_wi_pattern(pattern, path):
+	import glob
+	for name in glob.glob(path + '*' + pattern + '*'):
+	    return(name)	
+
+
+def get_tbls_in_ddl(fname):
+	my_string = ['from','join']
+	exclude_string = "FROM ("
+	from_clause = []
+	srctbls = []
+
+	with open(fname, "r+") as f:
+		for line in f:
+			# ignore line if FROM followed by parenthesis
+			# if the line contains either FROM or JOIN take the lines
+			if any(x in line.lower() for x in my_string) and exclude_string.lower() not in line.lower():
+				from_clause.append(line)
+
+	t = 'FROM'
+	j = 'JOIN'
+
+	# take the word after either JOIN or FROM 
+	for s in from_clause:
+		if t in s:
+			i = s.split().index(t)
+			# print (s.split()[i+1])
+			srctbls.append(s.split()[i+1])
+		elif j in s:
+			i = s.split().index(j)
+			# print (s.split()[i+1])	
+			srctbls.append(s.split()[i+1])	
+
+	# dedup
+	srctbls = list(set(srctbls))
+	return srctbls
+
+
+
+
+def get_fnames_wi_pattern(pattern, path):
+	import glob
+	fnames = [name for name in glob.glob(path + pattern + '*')]
+	return(fnames)	
+
+files = get_fnames_wi_pattern(pattern, path)
+
+print(files)
+	
+
+# bug: my output contains double underscore
+
+# ['C:/Users/arul.francis/Documents/sales_biz_views_srccode_prod_ao_0914\\bv_account.sql', 'C:/Users/arul.francis/Documents/sales_biz_views_srccode_prod_ao_0914\\bv_account_activity.sql', 'C:/Users/arul.francis/Documents/sales_biz_views_srccode_prod_ao_0914\\bv_account_coverage.sql', 'C:/Users/arul.francis/Documents/sales_biz_views_srccode_prod_ao_0914\\bv_account_coverage_snapshot.sql', 'C:/Users/arul.francis/Documents/sales_biz_views_srccode_prod_ao_0914\\bv_account_funnel.sql']	
