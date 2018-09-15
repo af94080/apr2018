@@ -1,13 +1,3 @@
-path = 'C:/Users/arul.francis/Documents/sales_biz_views_srccode_prod_ao_0914/'	
-pattern = 'bv'
-
-
-def get_fnames_wi_pattern(pattern, path):
-	import glob
-	for name in glob.glob(path + '*' + pattern + '*'):
-	    return(name)	
-
-
 def get_tbls_in_ddl(fname):
 	my_string = ['from','join']
 	exclude_string = "FROM ("
@@ -37,21 +27,29 @@ def get_tbls_in_ddl(fname):
 
 	# dedup
 	srctbls = list(set(srctbls))
-	return srctbls
+	return sorted(srctbls)
 
 
 
 
 def get_fnames_wi_pattern(pattern, path):
-	import glob
-	fnames = [name for name in glob.glob(path + pattern + '*')]
+	import os
+	fnames = []
+	for name in os.listdir(path):
+		if pattern in name:
+			fnames.append(name)   
 	return(fnames)	
 
+path = 'C:/Users/arul.francis/Documents/sales_biz_views_srccode_prod_ao_0914/'	
+pattern = 'act'
+
 files = get_fnames_wi_pattern(pattern, path)
-
 print(files)
-	
 
-# bug: my output contains double underscore
+for file in files:
+	fname = path + file
+	tbls = get_tbls_in_ddl(fname)
 
-# ['C:/Users/arul.francis/Documents/sales_biz_views_srccode_prod_ao_0914\\bv_account.sql', 'C:/Users/arul.francis/Documents/sales_biz_views_srccode_prod_ao_0914\\bv_account_activity.sql', 'C:/Users/arul.francis/Documents/sales_biz_views_srccode_prod_ao_0914\\bv_account_coverage.sql', 'C:/Users/arul.francis/Documents/sales_biz_views_srccode_prod_ao_0914\\bv_account_coverage_snapshot.sql', 'C:/Users/arul.francis/Documents/sales_biz_views_srccode_prod_ao_0914\\bv_account_funnel.sql']	
+
+for tbl in tbls: 
+	print(tbl)
